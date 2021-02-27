@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Student{% endblock %}
+
+{% block body %}
+    <h1>Edit Student </h1>
+    <form action="{{path('student_update', {id: student.id})}}" method="POST">
+        Name:<input type="text" name="student_name" value="{{student.name}}">
+        Surname:<input type="text" name="student_surname" value="{{student.surname}}">
+        <button type="submit">Edit Student</button>
+    </form>
+{% endblock %}

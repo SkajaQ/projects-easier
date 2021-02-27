@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\GroupRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,6 +30,16 @@ class Group
      */
     private $project_id;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Student::class, mappedBy="group_id")
+     */
+    private $students;
+
+    public function __construct()
+    {
+        $this->students = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -38,21 +50,51 @@ class Group
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(): ?string
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getProjectId(): ?int
+    public function getProject(): ?int
     {
-        return $this->project_id;
+        return $this->project;
     }
 
-    public function setProjectId(int $project_id): self
+    public function setProject(): ?int
     {
-        $this->project_id = $project_id;
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Student[]
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addStudent(Student $student): self
+    {
+        if (!$this->students->contains($student)) {
+            $this->students[] = $student;
+            $student->setGroupId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudent(Student $student): self
+    {
+        if ($this->students->removeElement($student)) {
+            // set the owning side to null (unless already changed)
+            if ($student->getGroupId() === $this) {
+                $student->setGroupId(null);
+            }
+        }
 
         return $this;
     }

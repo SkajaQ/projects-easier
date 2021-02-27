@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Project{% endblock %}
+
+{% block body %}
+    <h1>Edit Project</h1>
+    <form action="{{path('project_update', {id: project.id})}}" method="POST">
+        Title:<input type="text" name="project_title" value="{{project.title}}">
+        {% for project in project %}
+        <option value="{{project.id}}" {% if project.id == projectId %} selected {% endif %}>
+        {{project.title}}
+        </option>
+        {% endfor %}
+        </select>
+        <button type="submit">Edit Project</button>
+    </form>
+    {# <script>
+        console.log($)
+        $('#summernote').summernote();
+    </script> #}
+{% endblock %}

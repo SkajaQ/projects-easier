@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create new Project{% endblock %}
+
+{% block body %}
+    <h1>Create new Project</h1>
+    <form action="{{path('project_store')}}" method="POST">
+        Title:<input type="text" name="project_title">
+        Groups in project:<input type="text" name="group_count">
+        Students per group:<input type="text" name="project_student_limit">
+        <button type="submit">Add new Project</button>
+    </form>
+{% endblock %}
