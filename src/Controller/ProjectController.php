@@ -19,9 +19,12 @@ class ProjectController extends AbstractController
     public function index(Request $r): Response
     {
         $projects = $this->getDoctrine()->getRepository(Project::class)->findBy([],['title'=>'asc']);
+
         return $this->render('project/index.html.twig', [
-            'project' => $projects,
+            'projects' => $projects,
         ]);
+
+        //TODO: if projects = 0 - padaryti uzrasa su pasiulymu create
     }
 
     /**
@@ -33,6 +36,17 @@ class ProjectController extends AbstractController
     }
 
     /**
+    * @Route("/project/{id}", name="project_details", methods={"GET"})
+    */
+    public function getProjectStudents(int $id)
+    {
+        $project = $this->getDoctrine()->getRepository(Project::class)->find($id);        
+        return $this->render('project/details.html.twig', [
+            'project' => $project,
+        ]);
+    }
+
+    /**
     * @Route("/project/store", name="project_store", methods={"POST"})
     */
     public function store(Request $r, ValidatorInterface $validator): Response
@@ -40,7 +54,7 @@ class ProjectController extends AbstractController
         $project = new Project();
         $project->
         setTitle($r->request->get('project_title'))->
-        setGroups($r->request->get('group_count'))->
+
         setStudentLimit($r->request->get('project_student_limit'));
 
         $em = $this->getDoctrine()->getManager();
@@ -56,6 +70,8 @@ class ProjectController extends AbstractController
             $em->persist($group);
             $em->flush();
         }
+
+        return $this->redirectToRoute('project_index');
     }
 
     /**

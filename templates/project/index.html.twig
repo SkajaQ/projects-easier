@@ -3,18 +3,19 @@
 {% block title %}Project list{% endblock %}
 
 {% block body %}
-<div style="margin-top: 30px;">
-    {# <h1>Projects</h1> #}
-        <ul>
-        {% for project in project %}
-            <li>
-            {{project.title}} 
-            <a href="{{ path('project_edit', {id: project.id}) }}">EDIT</a>
-            <form action="{{ path('project_delete', {id: project.id}) }}" method="POST">
-            <button type="submit">DELETE</button>
-            </form>
-            </li>
+<div class="container cont-table" style="margin-top: 30px; display: inline-block">
+    <ul>
+        {% for project in projects %}
+            <div class="row result-row">
+                <div class="col-3"><a href="{{ path('project_details', {id: project.id}) }}">{{project.title}}</a></div>
+                <div class="col-2"><a href="{{ path('project_edit', {id: project.id}) }}">Edit</a></div>
+                <div class="col-2">
+                    <form action="{{ path('project_delete', {id: project.id}) }}" method="POST">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
         {% endfor %}
-        </ul>
-    </div>
+    </ul>
+</div>
 {% endblock %}

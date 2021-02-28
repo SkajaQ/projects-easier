@@ -4,9 +4,9 @@
 
 {% block body %}
     <h1>Add new Student</h1>
-    <form action="{{path('student_store')}}" method="POST">
-        Name:<input type="text" name="student_name">
-        Surname:<input type="text" name="student_surname">
-        <button type="submit">Add new Student</button>
+    <form action="{{path('student_store', {projectId: projectId})}}" method="POST">
+        <div class="line "><span class="table-title">Name:</span><input type="text" name="student_name"></div>
+        <div class="line"><span class="table-title">Surname:</span><input type="text" name="student_surname"></div>
+        <div><button type="submit">Add new Student</button></div>
     </form>
 {% endblock %}

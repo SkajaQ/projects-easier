@@ -8,6 +8,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=StudentRepository::class)
+ * @ORM\Table(
+ *       uniqueConstraints={
+ *          @ORM\UniqueConstraint(columns={"name", "surname"})
+ *      })
  */
 class Student
 {
@@ -32,12 +36,12 @@ class Student
      * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="students")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $project_id;
+    private $project;
 
     /**
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="students")
      */
-    private $group_id;
+    private $projectGroup;
 
     public function getId(): ?int
     {
@@ -68,29 +72,27 @@ class Student
         return $this;
     }
 
-    public function getProjectId(): ?Project
+    public function getProject(): ?Project
     {
-        return $this->project_id;
+        return $this->project;
     }
 
-    public function setProjectId(?Project $project_id): self
+    public function setProject(?Project $project): self
     {
-        $this->project_id = $project_id;
+        $this->project = $project;
 
         return $this;
     }
 
-    public function getGroupId(): ?Group
+    public function getProjectGroup(): ?Group
     {
-        return $this->group_id;
+        return $this->projectGroup;
     }
 
-    public function setGroupId(?Group $group_id): self
+    public function setProjectGroup(?Group $projectGroup): self
     {
-        $this->group_id = $group_id;
+        $this->projectGroup = $projectGroup;
 
         return $this;
-    }
-
-    
+    }   
 }

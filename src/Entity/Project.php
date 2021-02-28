@@ -28,10 +28,15 @@ class Project
     /**
      * @ORM\Column(type="integer")
      */
-    private $student_limit;
+    private $studentLimit;
 
     /**
-     * @ORM\OneToMany(targetEntity=Student::class, mappedBy="project_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Group::class, mappedBy="project", orphanRemoval=true)
+     */
+    private $groups;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Student::class, mappedBy="project", orphanRemoval=true)
      */
     private $students;
 
@@ -57,26 +62,29 @@ class Project
         return $this;
     }
 
-    public function getGroups(): ?int
+    /**
+     * @return Collection|Group[]
+     */
+    public function getGroups(): Collection
     {
-        return $this->group;
+        return $this->groups;
     }
 
-    public function setGroups(int $group): self
+    public function setGroups($groups): self
     {
-        $this->group = $group;
+        $this->groups = $groups;
 
         return $this;
     }
 
     public function getStudentLimit(): ?int
     {
-        return $this->student_limit;
+        return $this->studentLimit;
     }
 
-    public function setStudentLimit(int $student_limit): self
+    public function setStudentLimit(int $studentLimit): self
     {
-        $this->student_limit = $student_limit;
+        $this->studentLimit = $studentLimit;
 
         return $this;
     }
@@ -93,7 +101,7 @@ class Project
     {
         if (!$this->students->contains($student)) {
             $this->students[] = $student;
-            $student->setProjectId($this);
+            $student->setProject($this);
         }
 
         return $this;
@@ -103,11 +111,11 @@ class Project
     {
         if ($this->students->removeElement($student)) {
             // set the owning side to null (unless already changed)
-            if ($student->getProjectId() === $this) {
-                $student->setProjectId(null);
+            if ($student->getProject() === $this) {
+                $student->setProject(null);
             }
         }
 
         return $this;
-    }
+    }   
 }

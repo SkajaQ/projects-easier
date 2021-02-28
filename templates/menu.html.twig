@@ -9,16 +9,10 @@
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul	class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
-                    <a id="navbarDropdownMenuLink" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Choose project 
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="{{ path('project_index') }}"></a></li>
-                        
-                    </ul>
+					<a class="dropdown-item nav-link" href="{{ path('project_index') }}">Back to Projects</a>
                 </li>
 				<li class="nav-item dropdown">
-					<li><a class="dropdown-item" href="{{ path('project_create') }}">New Project</a></li>
+					<a class="dropdown-item nav-link" style="font-weight: bold" href="{{ path('project_create') }}">New Project</a>
 				</li>
 			</ul>
 		</div>

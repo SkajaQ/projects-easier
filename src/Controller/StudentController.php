@@ -12,63 +12,37 @@ use App\Entity\Student;
 use App\Entity\Project;
 
 class StudentController extends AbstractController
-{
+{    
     /**
-    * @Route("/project/{id}", methods={"GET"})
+    * @Route("/student/create/{projectId}", name="student_create", methods={"POST"})
     */
-    public function getProjectStudents()
+    public function create(Request $r, int $projectId): Response
     {
-        $students = $this->getDoctrine()->getRepository(Student::class)->findBy([],['surname'=>'asc']);
-        return $this->render('student/index.html.twig', [
-            'student' => $students,
+        return $this->render('student/create.html.twig', [
+            'projectId' => $projectId,
         ]);
     }
 
     /**
-    * @Route("/student/{id}", name="student_index", methods={"GET"})
+    * @Route("/student/store/{projectId}", name="student_store", methods={"POST"})
     */
-    public function getStudentById(int $id)
-    {
-        $students = $this->getDoctrine()->getRepository(Student::class)->findBy($id);
-        return $this->render('student/index.html.twig', [
-            'student' => $students,
-        ]);
-    }
-    
-    /**
-    * @Route("/student/create", name="student_create", methods={"GET"})
-    */
-    public function create(Request $r): Response
-    {
-        return $this->render('student/create.html.twig', []);
-    }
-
-    /**
-    * @Route("/student/store", name="student_store", methods={"POST"})
-    */
-    public function store(Request $r, ValidatorInterface $validator): Response
+    public function store(Request $r, ValidatorInterface $validator, int $projectId): Response
     {
         $student = new Student();
         $student->
         setName($r->request->get('student_name'))->
         setSurname($r->request->get('student_surname'));
 
-        // if ($form->isSubmitted() && $form->isValid()) {
-        //     $project = $this->getDoctrine()->getRepository(Project::class)->find($student->getProjectId());
-        //     $student->setProject($project);
-
-        //     $em = $this->getDoctrine()->getManager();
-        //     $em->persist($student);
-        //     $em->flush();
-
-        //     return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
-        // }
+        $project = $this->getDoctrine()->getRepository(Project::class)->find($projectId);
+        $student->setProject($project);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($student);
         $em->flush();
 
-        return $this->redirectToRoute('student_index');
+        return $this->redirectToRoute('project_details', [
+            'id' => $projectId,
+        ]);
     }
 
     /**
@@ -104,7 +78,7 @@ class StudentController extends AbstractController
         $em->persist($student);
         $em->flush();
 
-        return $this->redirectToRoute('student_index');
+        return $this->redirectToRoute('project_details');
     }
 
     /**
@@ -118,6 +92,30 @@ class StudentController extends AbstractController
         $em->remove($student);
         $em->flush();
 
-        return $this->redirectToRoute('student_index');
+        return $this->redirectToRoute('project_details');
+    }
+
+    /**
+    * @Route("/student/assign/{id}", name="student_assign", methods={"POST"})
+    */
+    public function assign(Request $request, ValidatorInterface $validator, int $id): Response
+    {
+        $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
+
+        $data = json_decode($request->getContent(), true);
+
+        $groupId = $data['groupId'];
+        $projectId = $data['projectId'];
+
+        $group = $this->getDoctrine()->getRepository(Group::class)->find($groupId);
+        $group->addStudent($student);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($group);
+        $em->flush();
+
+        return $this->redirectToRoute('project_details', [
+            'id' => $projectId,
+        ]);
     }
 }

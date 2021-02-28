@@ -31,7 +31,13 @@ class Group
     private $project_id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Student::class, mappedBy="group_id")
+     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="groups")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $project;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Student::class, mappedBy="projectGroup")
      */
     private $students;
 
@@ -50,19 +56,31 @@ class Group
         return $this->name;
     }
 
-    public function setName(): ?string
+    public function setName($name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getProject(): ?int
+    public function getProjectId(): ?int
+    {
+        return $this->project_id;
+    }
+
+    public function setProjectId($project_id): self
+    {
+        $this->project_id = $project_id;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
     {
         return $this->project;
     }
 
-    public function setProject(): ?int
+    public function setProject(?Project $project): self
     {
         $this->project = $project;
 
@@ -81,7 +99,7 @@ class Group
     {
         if (!$this->students->contains($student)) {
             $this->students[] = $student;
-            $student->setGroupId($this);
+            $student->setProjectGroup($this);
         }
 
         return $this;
@@ -91,11 +109,11 @@ class Group
     {
         if ($this->students->removeElement($student)) {
             // set the owning side to null (unless already changed)
-            if ($student->getGroupId() === $this) {
-                $student->setGroupId(null);
+            if ($student->getProjectGroup() === $this) {
+                $student->setProjectGroup(null);
             }
         }
 
         return $this;
-    }
+    }   
 }

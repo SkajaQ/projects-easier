@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Student list{% endblock %}
+
+{% block body %}
+
+    <div>
+        <div style="margin-top: 25px; font-weight: bold">Project: {{project.title}}</div>
+        <div style="font-weight: bold">Number of groups: {{project.groups|length}}</div>
+        <div style="margin-bottom: 25px; font-weight: bold">Students per group: {{project.studentLimit}}</div>
+
+       <h3>Students</h3> 
+            <div class="container cont-names"> 
+                <div class="row names-row">
+                    <div class="col-3">
+                        Students
+                    </div>
+                    <div class="col-3">
+                        Group
+                    </div>
+                    <div class="col-6">
+                        Actions
+                    </div>
+                </div>
+
+            <div class="row result-row" >
+                {% for student in project.students %}
+                    <div class="col-3" style="margin-top: 10px">{{student.name}} {{student.surname}}</div>
+                    <div class="col-3" style="margin-top: 10px">
+                        {% if student.projectGroup != null %}
+                            {{student.projectGroup.name}}
+                        {% endif %}
+                        {% if student.projectGroup == null %}
+                            -
+                        {% endif %}
+                    </div>
+                    <div class="col-6" style="display: flex; margin-top: 1px">
+                        <div style="float: left; margin-right: 25px" class="btn btn-warning"><a href="{{ path('student_edit', {id: student.id}) }}">Edit</a></div>
+                        <div style="float: right"><form action="{{ path('student_delete', {id: student.id}) }}" method="POST">
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                        </form></div>
+                    </div>
+                {% endfor %}
+            </div>
+        <br>
+        <form action="{{ path('student_create', {projectId: project.id}) }}" method="POST">
+        <button type="submit">Add new Student</button>
+        </form>
+        <br><br>
+        <h3>Groups</h3>
+            <br>
+            {% for group in project.groups %}
+                <table style="display: inline-block; margin: 10px"> 
+                    <tr><th>{{group.name}}</th></tr>
+                    {% for i in 0.. project.studentLimit -1 %}
+                        <tr> 
+                        {% if group.students|length > i %}
+                            <td>{{ group.students[i].name}} {{group.students[i].surname }}</td>
+                        {% endif %}
+                        {% if group.students|length <= i %}
+                            <td>
+                                <select class="ml-1 lolo" onChange="assignStudent({{group.id}}, this.value, {{project.id}})">
+                                    <option value="0" disabled selected>Assign Student</option>
+                                    {% for student in project.students %}
+                                        {% if student.projectGroup == null %}
+                                            <option value="{{student.id}}">{{student.name}} {{student.surname}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        {% endif %}
+                        </tr> 
+                    {% endfor %}
+                </table>
+            {% endfor %}
+    </div>
+{% endblock %}

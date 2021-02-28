@@ -3,11 +3,13 @@
 {% block title %}Create new Project{% endblock %}
 
 {% block body %}
-    <h1>Create new Project</h1>
+    <h2 style="margin-top: 25px">Create new Project</h2>
+    
     <form action="{{path('project_store')}}" method="POST">
-        Title:<input type="text" name="project_title">
-        Groups in project:<input type="text" name="group_count">
-        Students per group:<input type="text" name="project_student_limit">
-        <button type="submit">Add new Project</button>
+        <div class="line"><span class="table-title">Title:</span><input type="text" name="project_title"></div>
+        <div class="line"><span class="table-title">Groups in project:</span><input type="text" name="group_count"></div>
+        <div class="line"><span class="table-title">Students per group:</span><input type="text" name="project_student_limit"></div>
+        <div><button type="submit">Add new Project</button></div>
     </form>
+
 {% endblock %}
