@@ -17,6 +17,8 @@
 - Projects relate to Groups and Students as "OneToMany" also Groups relate to Students as "OneToMany"
 - Groups are automatically created and persisted on Project Creation
 - Students have unique full name (constraint in DB), students can be assigned only to one group 
+- Creating a student adds it only to that one needed project automatically
+- REST API for Student assigning to group provided (called via JS)
 - Orphan removal 
 
 ## Authors
