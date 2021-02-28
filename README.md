@@ -12,6 +12,12 @@
 - technologies used: PHP Symfony, Bootstrap, CSS, JS Axios
 - data persisted in mariaDB
 
+## Technical solution
+
+- Projects relate to Groups and Students as "OneToMany" also Groups relate to Students as "OneToMany"
+- Groups are automatically created and persisted on Project Creation
+- Students have unique full name (constraint in DB), students can be assigned only to one group 
+- Orphan removal 
 
 ## Authors
 
