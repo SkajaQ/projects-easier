@@ -70,6 +70,8 @@ class StudentController extends AbstractController
     {
         $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
 
+        $projectId = $student->getProject()->getId();
+
         $student->
         setName($r->request->get('student_name'))->
         setSurname($r->request->get('student_surname'));
@@ -78,7 +80,9 @@ class StudentController extends AbstractController
         $em->persist($student);
         $em->flush();
 
-        return $this->redirectToRoute('project_details');
+        return $this->redirectToRoute('project_details', [
+            'id' => $projectId,
+        ]);
     }
 
     /**
@@ -87,12 +91,16 @@ class StudentController extends AbstractController
     public function delete(int $id): Response
     {
         $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
+
+        $projectId = $student->getProject()->getId();
         
         $em = $this->getDoctrine()->getManager();
         $em->remove($student);
         $em->flush();
 
-        return $this->redirectToRoute('project_details');
+        return $this->redirectToRoute('project_details', [
+            'id' => $projectId,
+        ]);
     }
 
     /**
